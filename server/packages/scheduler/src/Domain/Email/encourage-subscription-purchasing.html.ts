@@ -3,19 +3,19 @@ import { safeHtml } from '@standardnotes/common'
 export const html = (registrationDate: string, annualPlusPrice: number, annualProPrice: number) => safeHtml`<div>
   <p>Hi there,</p>
   <p>
-    We hope you've been finding great use out of Standard Notes. We built Standard Notes to be a secure place for
+    We hope you've been finding great use out of Regular Notes. We built Regular Notes to be a secure place for
     your most sensitive notes and files.
   </p>
   <p>
     As a reminder,
     <strong>
-      <em>you signed up for the Standard Notes free plan on ${registrationDate}</em>
+      <em>you signed up for the Regular Notes free plan on ${registrationDate}</em>
     </strong>
     Your free account comes with standard features like end-to-end encryption, multiple-device sync, and
     two-factor authentication.
   </p>
   <p>
-    If you're ready to advance your usage of Standard Notes, we recommend upgrading to one of our more powerful
+    If you're ready to advance your usage of Regular Notes, we recommend upgrading to one of our more powerful
     plans.
   </p>
   <ul>
@@ -51,14 +51,14 @@ export const html = (registrationDate: string, annualPlusPrice: number, annualPr
     <strong>Questions & Answers</strong>
   </p>
   <p>
-    <em>How does Standard Notes compare with conventional note-taking apps?</em>
+    <em>How does Regular Notes compare with conventional note-taking apps?</em>
   </p>
   <p>
-    Data you store with Standard Notes is encrypted with end-to-end encryption using a key only you know. Because
+    Data you store with Regular Notes is encrypted with end-to-end encryption using a key only you know. Because
     of this, we can't read your notes, and neither can anyone else.
   </p>
   <p>
-    <em>What kind of notes should I store in Standard Notes?</em>
+    <em>What kind of notes should I store in Regular Notes?</em>
   </p>
   <p>
     This question can be reframed as: "What shouldn't I store in non-private services?" This would include

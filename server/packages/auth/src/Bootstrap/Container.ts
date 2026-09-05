@@ -661,7 +661,7 @@ export class ContainerConfigLoader {
       .toConstantValue(env.get('SESSION_TRACE_DAYS_TTL', true) ? +env.get('SESSION_TRACE_DAYS_TTL', true) : 90)
     container
       .bind(TYPES.Auth_U2F_RELYING_PARTY_NAME)
-      .toConstantValue(env.get('U2F_RELYING_PARTY_NAME', true) ?? 'Standard Notes')
+      .toConstantValue(env.get('U2F_RELYING_PARTY_NAME', true) ?? 'Regular Notes')
     container
       .bind(TYPES.Auth_U2F_RELYING_PARTY_ID)
       .toConstantValue(env.get('U2F_RELYING_PARTY_ID', true) ?? 'app.standardnotes.com')

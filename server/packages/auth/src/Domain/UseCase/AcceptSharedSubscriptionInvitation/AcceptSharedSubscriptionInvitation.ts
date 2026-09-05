@@ -69,7 +69,7 @@ export class AcceptSharedSubscriptionInvitation implements UseCaseInterface {
     if (activeUserSubscriptions.length === 0) {
       return {
         success: false,
-        message: 'The person that invited you does not have a running subscription with Standard Notes anymore.',
+        message: 'The person that invited you does not have a running subscription with Regular Notes anymore.',
       }
     }
     const inviterUserSubscription = activeUserSubscriptions[0]

@@ -18,6 +18,6 @@ or by replying directly to this email.</p>
 
 <p>Best regards,</p>
 <p>
-Standard Notes
+Regular Notes
 </p>
 `

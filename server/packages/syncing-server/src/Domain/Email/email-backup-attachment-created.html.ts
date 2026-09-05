@@ -3,7 +3,7 @@ import { safeHtml } from '@standardnotes/common'
 export const html = (email: string) => safeHtml`
 <p>
   Your encrypted data backup is attached for ${email}. You can import this file using
-  the Standard Notes web or desktop app, or by using the offline decryption script available at
+  the Regular Notes web or desktop app, or by using the offline decryption script available at
   <a style="text-decoration:none !important; text-decoration:none;">standardnotes.com/offline</a>.
 </p>
 
@@ -27,7 +27,7 @@ export const html = (email: string) => safeHtml`
 <p>
   <i>
     Want to disable daily backups? Uninstall 'Daily Email Backups' from your Extensions
-    menu in Standard Notes to immediately disable backups.
+    menu in Regular Notes to immediately disable backups.
     Otherwise, reply to this email with "Stop". Note that it may
     take up to 72 hours or more to perform manual removal via the "Stop" method.
   </i>

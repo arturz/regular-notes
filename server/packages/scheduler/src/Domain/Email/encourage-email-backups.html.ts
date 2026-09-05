@@ -11,7 +11,7 @@ export const html = safeHtml`<div>
     account.
   </p>
   <p>
-    To enable free email backups, use the Standard Notes web or desktop app, and open Preferences > Backups > Email Backups.
+    To enable free email backups, use the Regular Notes web or desktop app, and open Preferences > Backups > Email Backups.
   </p>
 
   <a href="https://standardnotes.com/help/28/how-do-i-enable-daily-email-backups">

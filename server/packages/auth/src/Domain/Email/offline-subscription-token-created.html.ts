@@ -6,7 +6,7 @@ export const html = (userEmail: string, offlineSubscriptionDashboardUrl: string)
     <div class="sk-panel-section">
       <h1 class="h1 title sk-panel-row">
         <div class="sk-panel-column">
-          Access your Standard Notes Subscription Dashboard,
+          Access your Regular Notes Subscription Dashboard,
         </div>
       </h1>
       <div class="faded sk-panel-row small">Registered as ${userEmail}</div>
