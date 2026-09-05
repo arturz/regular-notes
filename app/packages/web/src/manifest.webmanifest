@@ -1,13 +1,4 @@
 {
-  "app": {
-    "launch": {
-      "urls": [
-        "https://app.standardnotes.com/"
-      ],
-      "web_url": "https://app.standardnotes.com",
-      "container": "tab"
-    }
-  },
   "offline_enabled": true,
   "permissions": [],
   "requirements": {

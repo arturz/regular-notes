@@ -3,7 +3,6 @@ export const Web_TYPES = {
   AndroidBackHandler: Symbol.for('AndroidBackHandler'),
   ArchiveManager: Symbol.for('ArchiveManager'),
   AutolockService: Symbol.for('AutolockService'),
-  ChangelogService: Symbol.for('ChangelogService'),
   DesktopManager: Symbol.for('DesktopManager'),
   SuperConverter: Symbol.for('SuperConverter'),
   Importer: Symbol.for('Importer'),

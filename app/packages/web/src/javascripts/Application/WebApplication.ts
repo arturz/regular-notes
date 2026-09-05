@@ -33,7 +33,6 @@ import { prepareWebAuthnRegistrationOptions } from '@/Utils/prepareWebAuthnRegis
 import {
   ArchiveManager,
   AutolockService,
-  ChangelogService,
   Importer,
   IsGlobalSpellcheckEnabled,
   IsMobileDevice,
@@ -590,10 +589,6 @@ export class WebApplication extends SNApplication implements WebApplicationInter
 
   get linkingController(): LinkingController {
     return this.deps.get<LinkingController>(Web_TYPES.LinkingController)
-  }
-
-  get changelogService(): ChangelogService {
-    return this.deps.get<ChangelogService>(Web_TYPES.ChangelogService)
   }
 
   get pluginsService(): PluginsServiceInterface {

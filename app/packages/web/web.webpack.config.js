@@ -22,7 +22,6 @@ module.exports = (env) => {
     { from: 'src/index.html' },
     { from: 'src/manifest.webmanifest' },
     { from: 'src/robots.txt' },
-    { from: 'src/.well-known', to: '.well-known' },
   ]
 
   if (process.env.BUILD_TARGET !== 'clipper') {

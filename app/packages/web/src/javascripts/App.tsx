@@ -10,6 +10,7 @@ declare global {
     enabledUnfinishedFeatures: boolean
     plansUrl?: string
     purchaseUrl?: string
+    sourceCodeUrl?: string
     startApplication?: StartApplication
     websocketUrl: string
     electronAppVersion?: string

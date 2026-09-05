@@ -1,4 +1,4 @@
-import { compareSemVersions, StatusServiceEvent } from '@standardnotes/snjs'
+import { StatusServiceEvent } from '@standardnotes/snjs'
 import { c } from 'ttag'
 import { keyboardStringForShortcut, OPEN_PREFERENCES_COMMAND } from '@standardnotes/ui-services'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -11,7 +11,7 @@ import RoundIconButton from '../Button/RoundIconButton'
 import CountBubble from '../Preferences/PreferencesComponents/CountBubble'
 
 type Props = {
-  openPreferences: (openWhatsNew: boolean) => void
+  openPreferences: () => void
 }
 
 const PreferencesButton = ({ openPreferences }: Props) => {
@@ -23,22 +23,9 @@ const PreferencesButton = ({ openPreferences }: Props) => {
     [keyboardService],
   )
 
-  const [changelogLastReadVersion, setChangelogLastReadVersion] = useState(() =>
-    application.changelogService.getLastReadVersion(),
-  )
-  const isChangelogUnread = useMemo(() => {
-    return changelogLastReadVersion && !application.isNativeMobileWeb()
-      ? compareSemVersions(application.version, changelogLastReadVersion) > 0
-      : false
-  }, [application, changelogLastReadVersion])
-  useEffect(
-    () => application.changelogService.addLastReadChangeListener(setChangelogLastReadVersion),
-    [application.changelogService],
-  )
-
   const onClick = useCallback(() => {
-    openPreferences(isChangelogUnread)
-  }, [isChangelogUnread, openPreferences])
+    openPreferences()
+  }, [openPreferences])
 
   const [bubbleCount, setBubbleCount] = useState<string | undefined>()
   useEffect(() => {
@@ -73,7 +60,6 @@ const PreferencesButton = ({ openPreferences }: Props) => {
           <Icon type="tune" className="rounded group-hover:text-info" />
           <CountBubble position="right" count={bubbleCount} />
         </div>
-        {isChangelogUnread && <div className="absolute right-0.5 top-0.5 h-2 w-2 rounded-full bg-info" />}
       </button>
     </StyledTooltip>
   )

@@ -50,10 +50,8 @@ const InitialHTML = `<div>
 	<p><br></p>
 	<h2><span>Images</span></h2>
   <p><br></p>
-  <p>You can add images to your note by selecting the "Image from URL" option from the <code spellcheck="false"><span>/</span></code> menu or Insert menu in the toolbar.</p>
-  <p><br></p>
-  <p><img src="https://standardnotes.com/static/292c6ba50c69a3ae4f8b1883e7f505f6/1f7f6/vault-wide.jpg" /></p>
-  <p><br></p>
+	<p>You can add images to your note by selecting the "Image from URL" option from the <code spellcheck="false"><span>/</span></code> menu or Insert menu in the toolbar.</p>
+	<p><br></p>
 	<h2><span>Collapsible sections</span></h2>
 	<p><br></p>
 	<details open="">

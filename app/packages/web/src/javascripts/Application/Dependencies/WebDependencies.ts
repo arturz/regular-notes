@@ -1,7 +1,6 @@
 import {
   ArchiveManager,
   AutolockService,
-  ChangelogService,
   GetItemTags,
   Importer,
   IsGlobalSpellcheckEnabled,
@@ -150,10 +149,6 @@ export class WebDependencies extends DependencyContainer {
       return isDesktopDevice(application.device)
         ? new DesktopManager(application, application.device, application.fileBackups as BackupServiceInterface)
         : undefined
-    })
-
-    this.bind(Web_TYPES.ChangelogService, () => {
-      return new ChangelogService(application.environment, application.storage)
     })
 
     this.bind(Web_TYPES.PluginsService, () => {

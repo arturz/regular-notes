@@ -350,10 +350,7 @@ class Footer extends AbstractComponent<Props, State> {
     this.application.accountMenuController.closeAccountMenu()
   }
 
-  openPreferences = (openWhatsNew: boolean) => {
-    if (openWhatsNew) {
-      this.application.preferencesController.setCurrentPane('whats-new')
-    }
+  openPreferences = () => {
     this.application.preferencesController.openPreferences()
   }
 
@@ -379,6 +376,20 @@ class Footer extends AbstractComponent<Props, State> {
             <div className="relative z-footer-bar-item select-none">
               <PreferencesButton openPreferences={this.openPreferences} />
             </div>
+
+            {window.sourceCodeUrl ? (
+              <div className="relative z-footer-bar-item ml-1.5 hidden select-none items-center lg:flex">
+                <a
+                  href={window.sourceCodeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="no-decoration text-xs text-passive-1 hover:text-info"
+                  title={c('B2.NavSharedUI.Info').t`Get the source code of this self-hosted app`}
+                >
+                  {c('B2.NavSharedUI.Info').t`Source`}
+                </a>
+              </div>
+            ) : null}
 
             <div className="relative z-footer-bar-item select-none">
               <QuickSettingsButton application={this.application} />

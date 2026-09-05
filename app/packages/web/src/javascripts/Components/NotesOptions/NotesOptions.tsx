@@ -10,7 +10,6 @@ import {
   STAR_NOTE_COMMAND,
 } from '@standardnotes/ui-services'
 import ChangeEditorOption from './ChangeEditorOption'
-import ListedActionsOption from './Listed/ListedActionsOption'
 import AddTagOption from './AddTagOption'
 import { NotesOptionsProps } from './NotesOptionsProps'
 import { useResponsiveAppPane } from '../Panes/ResponsivePaneProvider'
@@ -131,7 +130,6 @@ const NotesOptions = ({ notes, closeMenu }: NotesOptionsProps) => {
     return <ProtectedUnauthorizedLabel />
   }
 
-  const areSomeNotesInSharedVault = notes.some((note) => application.vaults.getItemVault(note)?.isSharedVaultListing())
   const areSomeNotesInReadonlySharedVault = notes.some((note) => {
     const vault = application.vaults.getItemVault(note)
     return vault?.isSharedVaultListing() && application.vaultUsers.isCurrentUserReadonlyVaultMember(vault)
@@ -379,12 +377,6 @@ const NotesOptions = ({ notes, closeMenu }: NotesOptionsProps) => {
             editorForNote &&
             !isUIFeatureAnIframeFeature(editorForNote) &&
             application.featuresController.isUniversalSearchEnabled() && <PlainNoteOptions closeMenu={closeMenu} />}
-
-          {!areSomeNotesInSharedVault && (
-            <MenuSection>
-              <ListedActionsOption iconClassName={iconClass} application={application} note={notes[0]} />
-            </MenuSection>
-          )}
 
           {editorForNote && (
             <MenuSection>
