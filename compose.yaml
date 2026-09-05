@@ -9,7 +9,8 @@ services:
     restart: unless-stopped
     init: true
     env_file:
-      - .env
+      - path: .env
+        required: false
     environment:
       NODE_ENV: production
       PORT: "3000"
@@ -18,13 +19,13 @@ services:
       FILES_SERVER_URL: ""
       COOKIE_DOMAIN: ""
       COOKIE_SAME_SITE: Lax
-      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
       COOKIE_PARTITIONED: "false"
       E2E_TESTING: "false"
       CACHE_TYPE: memory
       LOG_LEVEL: ${LOG_LEVEL:-info}
     ports:
-      - "127.0.0.1:${HOST_PORT:-3020}:3000"
+      - "${HOST_PORT:-3020}:3000"
     volumes:
       - ./data:/data
     read_only: true
@@ -34,6 +35,10 @@ services:
       - no-new-privileges:true
     cap_drop:
       - ALL
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
     healthcheck:
       test:
         - CMD

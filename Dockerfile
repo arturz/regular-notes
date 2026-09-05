@@ -51,9 +51,11 @@ COPY --from=web-builder --chown=node:node /build/app/packages/web/dist/ /opt/web
 RUN mkdir -p /data/database /data/uploads \
   && chown -R node:node /data
 
-USER node
+COPY docker/entrypoint.cjs /opt/entrypoint.cjs
+
+ENTRYPOINT ["node", "/opt/entrypoint.cjs"]
 
 EXPOSE 3000
 VOLUME ["/data"]
 
-CMD ["node", "--require", "./.pnp.cjs", "packages/home-server/dist/bin/server.js"]
+CMD ["--require", "./.pnp.cjs", "packages/home-server/dist/bin/server.js"]

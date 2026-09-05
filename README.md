@@ -1,28 +1,35 @@
 # Regular Notes
 
-Unofficial [Standard Notes](https://github.com/standardnotes/app) distribution
-for self-hosting: one container, SQLite, one URL for the web app and API.
-No Redis or Nginx required.
+Run the end-to-end encrypted [Standard Notes](https://standardnotes.com) app on your own server.
+This setup uses roughly 10x less RAM than the official microservices setup
+(160 MB vs 1.6 GB). Everything runs in one container backed by plain SQLite.
 
-## Run
+## Run it
 
-Requires Docker Compose and OpenSSL.
+You need Docker Compose 2.24 or newer:
 
 ```sh
-./init-secrets.sh
-docker compose up -d --build
+docker compose up --build --wait
 ```
 
-The app listens on `127.0.0.1:3020`. Access it through a private HTTPS reverse
-proxy, such as Tailscale Serve. For local HTTP testing, set `COOKIE_SECURE=false`
-in `.env`; restore `true` for HTTPS.
+Then open <http://127.0.0.1:3020> and register an account.
 
-Data lives in `data/`. Back it up and keep it and `.env` out of Git.
-Desktop and mobile clients can use the same HTTPS URL as their Custom Sync Server.
+Everything you care about lives in `data/`. Back up that folder and
+you're safe.
 
-Premium features require a [Standard Notes Offline plan](https://standardnotes.com/purchase/offline).
-Enter the code in Preferences → General → Offline activation.
+To reach it from another device, at home or away, put it behind a private
+HTTPS proxy (Tailscale Serve works great). Plain HTTP over the LAN is not
+enough, the encryption needs HTTPS or localhost.
 
-This project is not affiliated with Standard Notes. See [NOTICE](NOTICE) for
-upstream revisions and licenses. Preserve the original notices and provide
-users with the corresponding source of your deployment.
+Copy `.env.example` to `.env` if you need to change the port, or once you
+are behind HTTPS and want secure cookies on.
+
+## Premium features
+
+Advanced features require a paid [Standard Notes Offline plan](https://standardnotes.com/purchase/offline), activated in Preferences → General → Offline activation.
+
+## Fine print
+
+Regular Notes is unofficial and independent, not affiliated with Standard
+Notes. See [NOTICE](NOTICE) for what's taken from upstream and under which
+license.

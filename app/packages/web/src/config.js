@@ -5,7 +5,7 @@ window.enabledUnfinishedFeatures = false
 window.websocketUrl = ''
 // Official purchase page: the client appends /offline for the self-host legal path
 // (Preferences > General > Offline activation). Keep it to support upstream.
-window.purchaseUrl = 'https://standardnotes.com'
+window.purchaseUrl = 'https://standardnotes.com/purchase'
 window.plansUrl = ''
 window.dashboardUrl = ''
 // Corresponding-source offer (AGPL) shown in the footer when set, e.g. your public fork URL.
