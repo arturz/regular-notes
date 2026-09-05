@@ -110,11 +110,11 @@ export class HomeServer implements HomeServerInterface {
               formAction: ["'self'"],
               frameAncestors: ["*", "*.standardnotes.org", "*.standardnotes.com"],
               frameSrc: ["*", "blob:"],
-              imgSrc: ["'self'", "*", "data:"],
+              imgSrc: ["'self'", "*", "data:", "blob:"],
               manifestSrc: ["'self'"],
-              mediaSrc: ["'self'"],
+              mediaSrc: ["'self'", "*", "blob:", "data:"],
               objectSrc: ["'self'"],
-              scriptSrc: ["'self'"],
+              scriptSrc: ["'self'", "'wasm-unsafe-eval'"],
               styleSrc: ["'self'"]
             }
           }
