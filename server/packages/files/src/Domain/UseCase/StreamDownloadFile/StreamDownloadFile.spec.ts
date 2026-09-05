@@ -17,7 +17,7 @@ describe('StreamDownloadFile', () => {
 
   beforeEach(() => {
     valetTokenRepository = {} as jest.Mocked<ValetTokenRepositoryInterface>
-    valetTokenRepository.markAsUsed = jest.fn()
+    valetTokenRepository.consume = jest.fn().mockResolvedValue(true)
 
     fileDownloader = {} as jest.Mocked<FileDownloaderInterface>
     fileDownloader.createDownloadStream = jest.fn().mockReturnValue(new Readable())
@@ -39,7 +39,7 @@ describe('StreamDownloadFile', () => {
     expect(result.success).toBeTruthy()
   })
 
-  it('should mark valet token as used if the last chunk is being streamed', async () => {
+  it('should consume valet token if the last chunk is being streamed', async () => {
     const result = await createUseCase().execute({
       ownerUuid: '2-3-4',
       resourceRemoteIdentifier: '1-2-3',
@@ -51,7 +51,22 @@ describe('StreamDownloadFile', () => {
 
     expect(result.success).toBeTruthy()
 
-    expect(valetTokenRepository.markAsUsed).toHaveBeenCalledWith(valetToken)
+    expect(valetTokenRepository.consume).toHaveBeenCalledWith(valetToken)
+  })
+
+  it('should reject a replayed valet token for the last chunk', async () => {
+    valetTokenRepository.consume = jest.fn().mockResolvedValue(false)
+
+    const result = await createUseCase().execute({
+      ownerUuid: '2-3-4',
+      resourceRemoteIdentifier: '1-2-3',
+      startRange: 0,
+      endRange: 200,
+      endRangeOfFile: 200,
+      valetToken,
+    })
+
+    expect(result.success).toBe(false)
   })
 
   it('should not stream download file contents from S3 if it fails', async () => {

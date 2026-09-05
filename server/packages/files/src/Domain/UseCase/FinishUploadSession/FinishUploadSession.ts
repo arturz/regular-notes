@@ -53,6 +53,10 @@ export class FinishUploadSession implements UseCaseInterface<void> {
         return Result.fail('Could not finish upload session. You are out of space.')
       }
 
+      if (!(await this.valetTokenRepository.consume(dto.valetToken))) {
+        return Result.fail('Invalid valet token')
+      }
+
       await this.fileUploader.finishUploadSession(uploadId, filePath, uploadChunkResults)
 
       if (sharedVaultUuid !== undefined) {
@@ -75,8 +79,6 @@ export class FinishUploadSession implements UseCaseInterface<void> {
           }),
         )
       }
-
-      await this.valetTokenRepository.markAsUsed(dto.valetToken)
 
       return Result.ok()
     } catch (_error) {

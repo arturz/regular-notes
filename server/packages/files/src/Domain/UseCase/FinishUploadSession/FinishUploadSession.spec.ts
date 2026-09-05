@@ -29,7 +29,7 @@ describe('FinishUploadSession', () => {
 
   beforeEach(() => {
     valetTokenRepository = {} as jest.Mocked<ValetTokenRepositoryInterface>
-    valetTokenRepository.markAsUsed = jest.fn()
+    valetTokenRepository.consume = jest.fn().mockResolvedValue(true)
 
     fileUploader = {} as jest.Mocked<FileUploaderInterface>
     fileUploader.finishUploadSession = jest.fn().mockReturnValue('ETag123')
@@ -109,6 +109,23 @@ describe('FinishUploadSession', () => {
       { tag: '123', chunkId: 1, chunkSize: 1 },
     ])
     expect(domainEventPublisher.publish).toHaveBeenCalled()
+    expect(valetTokenRepository.consume).toHaveBeenCalledWith('valet-token')
+  })
+
+  it('should reject a replayed valet token before finishing an upload', async () => {
+    valetTokenRepository.consume = jest.fn().mockResolvedValue(false)
+
+    const result = await createUseCase().execute({
+      resourceRemoteIdentifier: '2-3-4',
+      userUuid: '00000000-0000-0000-0000-000000000000',
+      uploadBytesLimit: 100,
+      uploadBytesUsed: 0,
+      valetToken: 'valet-token',
+    })
+
+    expect(result.isFailed()).toBe(true)
+    expect(fileUploader.finishUploadSession).not.toHaveBeenCalled()
+    expect(domainEventPublisher.publish).not.toHaveBeenCalled()
   })
 
   it('should finish an upload session for a vault shared file', async () => {

@@ -1,4 +1,4 @@
 export interface ValetTokenRepositoryInterface {
-  markAsUsed(valetToken: string): Promise<void>
+  consume(valetToken: string): Promise<boolean>
   isUsed(valetToken: string): Promise<boolean>
 }

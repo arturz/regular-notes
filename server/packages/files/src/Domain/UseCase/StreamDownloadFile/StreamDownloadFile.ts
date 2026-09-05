@@ -24,7 +24,14 @@ export class StreamDownloadFile implements UseCaseInterface {
       )
 
       if (dto.endRange === dto.endRangeOfFile) {
-        await this.valetTokenRepository.markAsUsed(dto.valetToken)
+        if (!(await this.valetTokenRepository.consume(dto.valetToken))) {
+          readStream.destroy()
+
+          return {
+            success: false,
+            message: 'Invalid valet token',
+          }
+        }
       }
 
       return {

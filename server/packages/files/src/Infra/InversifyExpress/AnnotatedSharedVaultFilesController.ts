@@ -47,6 +47,7 @@ export class AnnotatedSharedVaultFilesController extends BaseHttpController {
     }
 
     const result = await this.moveFile.execute({
+      valetToken: locals.valetToken,
       moveType: moveOperation.type,
       from: moveOperation.from,
       to: moveOperation.to,

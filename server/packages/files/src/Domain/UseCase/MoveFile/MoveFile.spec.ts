@@ -6,17 +6,33 @@ import { MoveFile } from './MoveFile'
 import { FileMoverInterface } from '../../Services/FileMoverInterface'
 import { GetFileMetadata } from '../GetFileMetadata/GetFileMetadata'
 import { DomainEventFactoryInterface } from '../../Event/DomainEventFactoryInterface'
+import { ValetTokenRepositoryInterface } from '../../ValetToken/ValetTokenRepositoryInterface'
+import { MoveFileDTO } from './MoveFileDTO'
 
 describe('MoveFile', () => {
   let fileMover: FileMoverInterface
   let getFileMetadataUseCase: GetFileMetadata
   let domainEventPublisher: DomainEventPublisherInterface
   let domainEventFactory: DomainEventFactoryInterface
+  let valetTokenRepository: ValetTokenRepositoryInterface
 
   let logger: Logger
 
-  const createUseCase = () =>
-    new MoveFile(getFileMetadataUseCase, fileMover, domainEventPublisher, domainEventFactory, logger)
+  const createUseCase = () => {
+    const useCase = new MoveFile(
+      getFileMetadataUseCase,
+      fileMover,
+      domainEventPublisher,
+      domainEventFactory,
+      valetTokenRepository,
+      logger,
+    )
+
+    return {
+      execute: (dto: Omit<MoveFileDTO, 'valetToken'> & { valetToken?: string }) =>
+        useCase.execute({ valetToken: 'valet-token', ...dto }),
+    }
+  }
 
   beforeEach(() => {
     getFileMetadataUseCase = {} as jest.Mocked<GetFileMetadata>
@@ -24,6 +40,9 @@ describe('MoveFile', () => {
 
     fileMover = {} as jest.Mocked<FileMoverInterface>
     fileMover.moveFile = jest.fn().mockReturnValue(413)
+
+    valetTokenRepository = {} as jest.Mocked<ValetTokenRepositoryInterface>
+    valetTokenRepository.consume = jest.fn().mockResolvedValue(true)
 
     logger = {} as jest.Mocked<Logger>
     logger.debug = jest.fn()
@@ -57,6 +76,28 @@ describe('MoveFile', () => {
       '00000000-0000-0000-0000-000000000000/2-3-4',
       '00000000-0000-0000-0000-000000000001/2-3-4',
     )
+    expect(valetTokenRepository.consume).toHaveBeenCalledWith('valet-token')
+  })
+
+  it('should reject a replayed valet token before moving a file', async () => {
+    valetTokenRepository.consume = jest.fn().mockResolvedValue(false)
+
+    const result = await createUseCase().execute({
+      resourceRemoteIdentifier: '2-3-4',
+      from: {
+        sharedVaultUuid: '00000000-0000-0000-0000-000000000000',
+        ownerUuid: '00000000-0000-0000-0000-000000000000',
+      },
+      to: {
+        sharedVaultUuid: '00000000-0000-0000-0000-000000000001',
+        ownerUuid: '00000000-0000-0000-0000-000000000001',
+      },
+      moveType: 'shared-vault-to-shared-vault',
+    })
+
+    expect(result.isFailed()).toBe(true)
+    expect(fileMover.moveFile).not.toHaveBeenCalled()
+    expect(domainEventPublisher.publish).not.toHaveBeenCalled()
   })
 
   it('should indicate an error if moving fails', async () => {

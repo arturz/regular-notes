@@ -5,12 +5,21 @@ import { ValetTokenRepositoryInterface } from '../../Domain/ValetToken/ValetToke
 export class RedisValetTokenRepository implements ValetTokenRepositoryInterface {
   private readonly VALET_TOKEN_PREFIX = 'vt'
 
-  constructor(private redisClient: IORedis.Redis) {}
+  constructor(
+    private redisClient: IORedis.Redis,
+    private retentionPeriodInSeconds = 60 * 60 * 24,
+  ) {}
 
-  async markAsUsed(valetToken: string): Promise<void> {
-    const dayInSeconds = 60 * 60 * 24
+  async consume(valetToken: string): Promise<boolean> {
+    const result = await this.redisClient.set(
+      `${this.VALET_TOKEN_PREFIX}:${valetToken}`,
+      'used',
+      'EX',
+      this.retentionPeriodInSeconds,
+      'NX',
+    )
 
-    await this.redisClient.setex(`${this.VALET_TOKEN_PREFIX}:${valetToken}`, dayInSeconds, 'used')
+    return result === 'OK'
   }
 
   async isUsed(valetToken: string): Promise<boolean> {

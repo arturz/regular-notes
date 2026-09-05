@@ -6,6 +6,7 @@ import { FileMoverInterface } from '../../Services/FileMoverInterface'
 import { MoveFileDTO } from './MoveFileDTO'
 import { DomainEventFactoryInterface } from '../../Event/DomainEventFactoryInterface'
 import { GetFileMetadata } from '../GetFileMetadata/GetFileMetadata'
+import { ValetTokenRepositoryInterface } from '../../ValetToken/ValetTokenRepositoryInterface'
 
 export class MoveFile implements UseCaseInterface<boolean> {
   constructor(
@@ -13,6 +14,7 @@ export class MoveFile implements UseCaseInterface<boolean> {
     private fileMover: FileMoverInterface,
     private domainEventPublisher: DomainEventPublisherInterface,
     private domainEventFactory: DomainEventFactoryInterface,
+    private valetTokenRepository: ValetTokenRepositoryInterface,
     private logger: Logger,
   ) {}
 
@@ -72,6 +74,10 @@ export class MoveFile implements UseCaseInterface<boolean> {
         return Result.fail(metadataResultOrError.getError())
       }
       const fileSize = metadataResultOrError.getValue()
+
+      if (!(await this.valetTokenRepository.consume(dto.valetToken))) {
+        return Result.fail('Invalid valet token')
+      }
 
       await this.fileMover.moveFile(srcPath, destPath)
 

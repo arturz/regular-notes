@@ -56,6 +56,7 @@ import { RecalculateQuota } from '../Domain/UseCase/RecalculateQuota/Recalculate
 import { FileQuotaRecalculationRequestedEventHandler } from '../Domain/Handler/FileQuotaRecalculationRequestedEventHandler'
 import { ValetTokenRepositoryInterface } from '../Domain/ValetToken/ValetTokenRepositoryInterface'
 import { RedisValetTokenRepository } from '../Infra/Redis/RedisValetTokenRepository'
+import { SQLiteValetTokenRepository } from '../Infra/SQLite/SQLiteValetTokenRepository'
 
 export class ContainerConfigLoader {
   constructor(private mode: 'server' | 'worker' = 'server') {}
@@ -90,6 +91,13 @@ export class ContainerConfigLoader {
     const isConfiguredForHomeServer = env.get('MODE', true) === 'home-server'
     const isConfiguredForSelfHosting = env.get('MODE', true) === 'self-hosted'
     const isConfiguredForHomeServerOrSelfHosting = isConfiguredForHomeServer || isConfiguredForSelfHosting
+    const configuredValetTokenTTL = env.get('VALET_TOKEN_TTL', true)
+      ? +env.get('VALET_TOKEN_TTL', true)
+      : 60 * 60 * 2
+    if (!Number.isFinite(configuredValetTokenTTL) || configuredValetTokenTTL <= 0) {
+      throw new Error('VALET_TOKEN_TTL must be a positive number')
+    }
+    const valetTokenRetentionPeriod = Math.max(60 * 60 * 24, configuredValetTokenTTL)
 
     container
       .bind<boolean>(TYPES.Files_IS_CONFIGURED_FOR_HOME_SERVER_OR_SELF_HOSTING)
@@ -105,19 +113,6 @@ export class ContainerConfigLoader {
 
     container.bind<TimerInterface>(TYPES.Files_Timer).toConstantValue(new Timer())
 
-    container.bind(TYPES.Files_REDIS_URL).toConstantValue(env.get('REDIS_URL'))
-
-    const redisUrl = container.get(TYPES.Files_REDIS_URL) as string
-    const isRedisInClusterMode = redisUrl.indexOf(',') > 0
-    let redis
-    if (isRedisInClusterMode) {
-      redis = new Redis.Cluster(redisUrl.split(','))
-    } else {
-      redis = new Redis(redisUrl)
-    }
-
-    container.bind(TYPES.Files_Redis).toConstantValue(redis)
-
     // services
     container
       .bind<TokenDecoderInterface<ValetTokenData>>(TYPES.Files_ValetTokenDecoder)
@@ -126,9 +121,30 @@ export class ContainerConfigLoader {
       .bind<DomainEventFactoryInterface>(TYPES.Files_DomainEventFactory)
       .toConstantValue(new DomainEventFactory(container.get<TimerInterface>(TYPES.Files_Timer)))
 
-    container
-      .bind<ValetTokenRepositoryInterface>(TYPES.Files_ValetTokenRepository)
-      .toConstantValue(new RedisValetTokenRepository(container.get<Redis>(TYPES.Files_Redis)))
+    if (isConfiguredForHomeServer) {
+      container
+        .bind<ValetTokenRepositoryInterface>(TYPES.Files_ValetTokenRepository)
+        .toConstantValue(
+          new SQLiteValetTokenRepository(
+            env.get('DB_SQLITE_DATABASE_PATH'),
+            container.get<TimerInterface>(TYPES.Files_Timer),
+            valetTokenRetentionPeriod,
+          ),
+        )
+    } else {
+      container.bind(TYPES.Files_REDIS_URL).toConstantValue(env.get('REDIS_URL'))
+
+      const redisUrl = container.get(TYPES.Files_REDIS_URL) as string
+      const isRedisInClusterMode = redisUrl.indexOf(',') > 0
+      const redis = isRedisInClusterMode ? new Redis.Cluster(redisUrl.split(',')) : new Redis(redisUrl)
+
+      container.bind(TYPES.Files_Redis).toConstantValue(redis)
+      container
+        .bind<ValetTokenRepositoryInterface>(TYPES.Files_ValetTokenRepository)
+        .toConstantValue(
+          new RedisValetTokenRepository(container.get<Redis>(TYPES.Files_Redis), valetTokenRetentionPeriod),
+        )
+    }
 
     if (isConfiguredForInMemoryCache) {
       container
@@ -252,6 +268,7 @@ export class ContainerConfigLoader {
           container.get<FileMoverInterface>(TYPES.Files_FileMover),
           container.get<DomainEventPublisherInterface>(TYPES.Files_DomainEventPublisher),
           container.get<DomainEventFactoryInterface>(TYPES.Files_DomainEventFactory),
+          container.get<ValetTokenRepositoryInterface>(TYPES.Files_ValetTokenRepository),
           container.get<winston.Logger>(TYPES.Files_Logger),
         ),
       )

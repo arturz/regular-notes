@@ -1,6 +1,7 @@
 import { SharedVaultMoveType } from '@standardnotes/security'
 
 export interface MoveFileDTO {
+  valetToken: string
   moveType: SharedVaultMoveType
   from: {
     sharedVaultUuid?: string

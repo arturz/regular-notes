@@ -24,7 +24,7 @@ describe('RemoveFile', () => {
 
   beforeEach(() => {
     valetTokenRepository = {} as jest.Mocked<ValetTokenRepositoryInterface>
-    valetTokenRepository.markAsUsed = jest.fn()
+    valetTokenRepository.consume = jest.fn().mockResolvedValue(true)
 
     fileRemover = {} as jest.Mocked<FileRemoverInterface>
     fileRemover.remove = jest.fn().mockReturnValue(413)
@@ -81,6 +81,24 @@ describe('RemoveFile', () => {
 
     expect(fileRemover.remove).toHaveBeenCalledWith('1-2-3/2-3-4')
     expect(domainEventPublisher.publish).toHaveBeenCalled()
+    expect(valetTokenRepository.consume).toHaveBeenCalledWith('valet-token')
+  })
+
+  it('should reject a replayed valet token before removing a file', async () => {
+    valetTokenRepository.consume = jest.fn().mockResolvedValue(false)
+
+    const result = await createUseCase().execute({
+      userInput: {
+        resourceRemoteIdentifier: '2-3-4',
+        userUuid: '1-2-3',
+        regularSubscriptionUuid: '3-4-5',
+      },
+      valetToken: 'valet-token',
+    })
+
+    expect(result.isFailed()).toBe(true)
+    expect(fileRemover.remove).not.toHaveBeenCalled()
+    expect(domainEventPublisher.publish).not.toHaveBeenCalled()
   })
 
   it('should remove a file for shared vault', async () => {

@@ -55,6 +55,7 @@
     "jsonwebtoken": "^9.0.0",
     "prettyjson": "^1.2.5",
     "reflect-metadata": "^0.2.1",
+    "sqlite3": "^5.1.6",
     "winston": "^3.8.1"
   },
   "devDependencies": {

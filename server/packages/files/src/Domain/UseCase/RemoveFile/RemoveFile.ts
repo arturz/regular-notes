@@ -21,13 +21,20 @@ export class RemoveFile implements UseCaseInterface<boolean> {
 
   async execute(dto: RemoveFileDTO): Promise<Result<boolean>> {
     const resourceUuid = dto.userInput?.resourceRemoteIdentifier ?? dto.vaultInput?.resourceRemoteIdentifier
-
     const ownerUuid = dto.userInput?.userUuid ?? dto.vaultInput?.sharedVaultUuid
+
+    if (resourceUuid === undefined || ownerUuid === undefined) {
+      return Result.fail('Could not remove file')
+    }
 
     try {
       this.logger.debug(`Removing file: ${resourceUuid}`)
 
       const filePath = `${ownerUuid}/${resourceUuid}`
+
+      if (!(await this.valetTokenRepository.consume(dto.valetToken))) {
+        return Result.fail('Invalid valet token')
+      }
 
       const removedFileSize = await this.fileRemover.remove(filePath)
 
@@ -50,11 +57,7 @@ export class RemoveFile implements UseCaseInterface<boolean> {
             fileByteSize: removedFileSize,
           }),
         )
-      } else {
-        return Result.fail('Could not remove file')
       }
-
-      await this.valetTokenRepository.markAsUsed(dto.valetToken)
 
       return Result.ok()
     } catch (error) {

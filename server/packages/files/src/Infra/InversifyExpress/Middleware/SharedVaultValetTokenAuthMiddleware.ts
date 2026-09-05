@@ -37,7 +37,6 @@ export class SharedVaultValetTokenAuthMiddleware extends BaseMiddleware {
 
       if (await this.valetTokenRepository.isUsed(valetToken)) {
         this.logger.debug('Already used valet token.', {
-          valetToken,
           codeTag: 'SharedVaultValetTokenAuthMiddleware',
         })
 
