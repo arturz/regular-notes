@@ -1,11 +1,11 @@
-name: standard-notes-one
+name: regular-notes
 
 services:
   standard-notes:
     build:
       context: .
-    image: standard-notes-one:local
-    container_name: standard-notes-one
+    image: regular-notes:local
+    container_name: regular-notes
     restart: unless-stopped
     init: true
     env_file:

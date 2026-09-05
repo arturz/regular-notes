@@ -1,4 +1,4 @@
-# Standard Notes One
+# Regular Notes
 
 Unofficial self-hosting distribution of Standard Notes for a single server:
 one container, one HTTP origin and one persistent data directory. The same Node
