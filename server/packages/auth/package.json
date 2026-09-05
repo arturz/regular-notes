@@ -2,7 +2,7 @@
   "name": "@standardnotes/auth-server",
   "version": "1.178.6",
   "engines": {
-    "node": ">=18.0.0 <21.0.0"
+    "node": ">=18.0.0 <25.0.0"
   },
   "description": "Auth Server for SN",
   "main": "dist/src/index.js",

@@ -2,7 +2,7 @@
   "name": "@standardnotes/revisions-server",
   "version": "1.51.19",
   "engines": {
-    "node": ">=18.0.0 <21.0.0"
+    "node": ">=18.0.0 <25.0.0"
   },
   "description": "Revisions Server",
   "main": "dist/src/index.js",
