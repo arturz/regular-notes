@@ -75,7 +75,7 @@ Migrate or activate them explicitly before importing an old database.
 
 ## Maintenance
 
-The exact imported revisions are in `UPSTREAM.md`. To update, import newer
+The exact imported revisions are in `NOTICE`. To update, import newer
 upstream snapshots, reapply/review the small local commits, run both monorepo
 test suites and rebuild the image. Never commit `.env`, `data/`, account exports
 or browser profiles.

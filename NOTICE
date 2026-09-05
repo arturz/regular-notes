@@ -5,3 +5,13 @@
 
 Both trees were imported without their upstream Git history into this combined
 repository. Their original license and attribution files remain in place.
+
+## License note
+
+`app/` is AGPL-3.0 (`app/LICENSE`, all packages declare `AGPL-3.0`).
+`server/` carries an upstream inconsistency that predates this fork and was
+left untouched: the `server/LICENSE` file names GPLv3, while all 19 server
+packages declare `AGPL-3.0-or-later` in their `package.json` metadata. This
+distribution complies with the stricter (AGPL) terms throughout — full
+corresponding source is published and network deployments must offer it to
+users — which satisfies either reading. See `README.md` ("Licensing").
