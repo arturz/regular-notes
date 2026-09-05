@@ -4,9 +4,10 @@ data
 app/node_modules
 app/packages/*/node_modules
 app/packages/*/dist
+app/.yarn/cache
 app/.yarn/unplugged
 app/.yarn/install-state.gz
-server/packages/*/dist
+server/.yarn/cache
 server/.yarn/unplugged
 server/.yarn/install-state.gz
 server/.pnp.cjs

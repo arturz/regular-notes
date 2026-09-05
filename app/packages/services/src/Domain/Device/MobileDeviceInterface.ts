@@ -5,7 +5,13 @@ import { DeviceInterface } from './DeviceInterface'
 import { AppleIAPReceipt } from '../Subscription/AppleIAPReceipt'
 import { ApplicationEvent } from '../Event/ApplicationEvent'
 
-import type { Notification } from '../../../../mobile/node_modules/@notifee/react-native/dist/index'
+// NOTE (regular-notes): @notifee/react-native types came from the deleted
+// mobile workspace via a relative import into its node_modules. The web
+// build never implements this interface, so a structural stub is enough.
+export type Notification = Record<string, unknown> & {
+  title?: string
+  body?: string
+}
 
 export interface MobileDeviceInterface extends DeviceInterface {
   environment: Environment.Mobile

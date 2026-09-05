@@ -47,7 +47,9 @@
     "@types/hoist-non-react-statics/@types/react": "17.0.2",
     "node-abi": "^4.2.0",
     "@typescript-eslint/eslint-plugin": "8.32.1",
-    "@typescript-eslint/parser": "8.32.1"
+    "@typescript-eslint/parser": "8.32.1",
+    "@standardnotes/component-relay": "https://github.com/standardnotes/component-relay/archive/893561d2dc72cd3c66f071b3a509b8b7dcd721de.tar.gz",
+    "@standardnotes/editor-kit": "https://github.com/standardnotes/editor-kit/archive/80f3080594c46a84e6a1689984fbc985ddd44a8f.tar.gz"
   },
   "dependencies": {
     "@standardnotes/snjs": "workspace:*"

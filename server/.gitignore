@@ -1,4 +1,5 @@
 .eslintcache
+.pnp.*
 .DS_Store
 .idea
 dist
@@ -6,7 +7,6 @@ coverage
 .env
 
 .yarn/*
-!.yarn/cache
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
