@@ -89,7 +89,7 @@ export class ActionsController extends BaseHttpController {
   @httpGet('/meta')
   async serverMetadata(): Promise<JsonResult> {
     return this.json({
-      captchaUIUrl: this.captchaUIUrl,
+      captchaUIUrl: this.captchaUIUrl || null,
     })
   }
 }
