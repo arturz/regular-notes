@@ -13,7 +13,7 @@ import helmet from 'helmet'
 import * as cors from 'cors'
 import * as cookieParser from 'cookie-parser'
 import * as http from 'http'
-import { text, json, Request, Response, NextFunction, raw } from 'express'
+import { text, json, Request, Response, NextFunction, raw, static as serveStatic } from 'express'
 import * as winston from 'winston'
 import { PassThrough } from 'stream'
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -57,6 +57,7 @@ export class HomeServer implements HomeServerInterface {
       const requestPayloadLimit = env.get('HTTP_REQUEST_PAYLOAD_LIMIT_MEGABYTES', true)
         ? `${+env.get('HTTP_REQUEST_PAYLOAD_LIMIT_MEGABYTES', true)}mb`
         : '50mb'
+      const webAssetsPath = env.get('WEB_ASSETS_PATH', true)
 
       this.configureLoggers(env, configuration)
 
@@ -185,6 +186,10 @@ export class HomeServer implements HomeServerInterface {
             Disallow: '/',
           }),
         )
+
+        if (webAssetsPath) {
+          app.use(serveStatic(webAssetsPath))
+        }
 
         if (env.get('E2E_TESTING', true) === 'true') {
           app.post('/e2e/activate-premium', (request: Request, response: Response) => {

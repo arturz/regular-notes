@@ -9,7 +9,7 @@ env.load()
 try {
   Promise.resolve(
     homeServer.start({
-      dataDirectoryPath: `${__dirname}/../data`,
+      dataDirectoryPath: env.get('DATA_DIR', true) ?? `${__dirname}/../data`,
       logStreamCallback: (chunk: Buffer) => {
         // eslint-disable-next-line no-console
         console.log(chunk.toString())

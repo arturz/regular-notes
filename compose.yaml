@@ -1,0 +1,51 @@
+name: standard-notes-one
+
+services:
+  standard-notes:
+    build:
+      context: .
+    image: standard-notes-one:local
+    container_name: standard-notes-one
+    restart: unless-stopped
+    init: true
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      DATA_DIR: /data
+      WEB_ASSETS_PATH: /opt/web
+      FILES_SERVER_URL: ""
+      COOKIE_DOMAIN: ""
+      COOKIE_SAME_SITE: Lax
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      COOKIE_PARTITIONED: "false"
+      E2E_TESTING: "false"
+      CACHE_TYPE: memory
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    ports:
+      - "127.0.0.1:${HOST_PORT:-3020}:3000"
+    volumes:
+      - ./data:/data
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/healthcheck/').then(r => { if (!r.ok) process.exit(1) }).catch(() => process.exit(1))"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"

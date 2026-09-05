@@ -18,6 +18,7 @@ module.exports = (env) => {
     { from: 'src/404.html' },
     { from: 'src/422.html' },
     { from: 'src/500.html' },
+    { from: 'src/config.js' },
     { from: 'src/index.html' },
     { from: 'src/manifest.webmanifest' },
     { from: 'src/robots.txt' },

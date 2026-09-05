@@ -972,7 +972,7 @@ export class ContainerConfigLoader {
           ['None', 'Lax', 'Strict'].includes(env.get('COOKIE_SAME_SITE', true))
             ? (env.get('COOKIE_SAME_SITE', true) as 'None' | 'Lax' | 'Strict')
             : 'None',
-          env.get('COOKIE_DOMAIN', true) ?? 'standardnotes.com',
+          env.get('COOKIE_DOMAIN', true) ?? (isConfiguredForHomeServer ? undefined : 'standardnotes.com'),
           env.get('COOKIE_SECURE', true) ? env.get('COOKIE_SECURE', true) === 'true' : true,
           env.get('COOKIE_PARTITIONED', true) ? env.get('COOKIE_PARTITIONED', true) === 'true' : true,
         ),

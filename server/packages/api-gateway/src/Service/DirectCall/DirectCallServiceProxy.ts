@@ -3,6 +3,7 @@ import { ServiceContainerInterface, ServiceIdentifier } from '@standardnotes/dom
 
 import { ServiceProxyInterface } from '../Proxy/ServiceProxyInterface'
 import { ResponseLocals } from '../../Controller/ResponseLocals'
+import { resolveFilesServerUrl } from './ResolveFilesServerUrl'
 
 export class DirectCallServiceProxy implements ServiceProxyInterface {
   constructor(
@@ -74,18 +75,18 @@ export class DirectCallServiceProxy implements ServiceProxyInterface {
     })
   }
 
-  async callAuthServer(request: never, response: never, methodIdentifier: string): Promise<void> {
+  async callAuthServer(request: Request, response: Response, methodIdentifier: string): Promise<void> {
     const authService = this.serviceContainer.get(ServiceIdentifier.create(ServiceIdentifier.NAMES.Auth).getValue())
     if (!authService) {
       throw new Error('Auth service not found')
     }
 
-    const serviceResponse = (await authService.handleRequest(request, response, methodIdentifier)) as {
+    const serviceResponse = (await authService.handleRequest(request as never, response as never, methodIdentifier)) as {
       statusCode: number
       json: Record<string, unknown>
     }
 
-    this.sendDecoratedResponse(response, serviceResponse)
+    this.sendDecoratedResponse(request, response, serviceResponse)
   }
 
   async callAuthServerWithLegacyFormat(
@@ -100,21 +101,21 @@ export class DirectCallServiceProxy implements ServiceProxyInterface {
     })
   }
 
-  async callRevisionsServer(request: never, response: never, methodIdentifier: string): Promise<void> {
+  async callRevisionsServer(request: Request, response: Response, methodIdentifier: string): Promise<void> {
     const service = this.serviceContainer.get(ServiceIdentifier.create(ServiceIdentifier.NAMES.Revisions).getValue())
     if (!service) {
       throw new Error('Revisions service not found')
     }
 
-    const serviceResponse = (await service.handleRequest(request, response, methodIdentifier)) as {
+    const serviceResponse = (await service.handleRequest(request as never, response as never, methodIdentifier)) as {
       statusCode: number
       json: Record<string, unknown>
     }
 
-    this.sendDecoratedResponse(response, serviceResponse)
+    this.sendDecoratedResponse(request, response, serviceResponse)
   }
 
-  async callSyncingServer(request: never, response: never, methodIdentifier: string): Promise<void> {
+  async callSyncingServer(request: Request, response: Response, methodIdentifier: string): Promise<void> {
     const service = this.serviceContainer.get(
       ServiceIdentifier.create(ServiceIdentifier.NAMES.SyncingServer).getValue(),
     )
@@ -122,12 +123,12 @@ export class DirectCallServiceProxy implements ServiceProxyInterface {
       throw new Error('Syncing service not found')
     }
 
-    const serviceResponse = (await service.handleRequest(request, response, methodIdentifier)) as {
+    const serviceResponse = (await service.handleRequest(request as never, response as never, methodIdentifier)) as {
       statusCode: number
       json: Record<string, unknown>
     }
 
-    this.sendDecoratedResponse(response, serviceResponse)
+    this.sendDecoratedResponse(request, response, serviceResponse)
   }
 
   async callLegacySyncingServer(_request: Request, response: Response, _methodIdentifier: string): Promise<void> {
@@ -155,6 +156,7 @@ export class DirectCallServiceProxy implements ServiceProxyInterface {
   }
 
   private sendDecoratedResponse(
+    request: Request,
     response: Response,
     serviceResponse: { statusCode: number; json: Record<string, unknown> },
   ): void {
@@ -167,7 +169,7 @@ export class DirectCallServiceProxy implements ServiceProxyInterface {
           roles: locals.roles,
         },
         server: {
-          filesServerUrl: this.filesServerUrl,
+          filesServerUrl: resolveFilesServerUrl(request, this.filesServerUrl),
         },
       },
       data: serviceResponse.json,
