@@ -2,6 +2,7 @@
 .env
 data
 app/node_modules
+app/packages/*/node_modules
 app/packages/*/dist
 app/.yarn/unplugged
 app/.yarn/install-state.gz
