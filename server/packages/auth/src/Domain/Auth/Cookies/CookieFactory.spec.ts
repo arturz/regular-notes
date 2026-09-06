@@ -29,4 +29,18 @@ describe('CookieFactory', () => {
 
     expect(cookies.every((cookie) => cookie.includes('Domain=notes.example.test'))).toBe(true)
   })
+
+  it('should omit the secure attribute when the factory is not secure', () => {
+    const factory = new CookieFactory('Lax', undefined, false, false)
+
+    const cookies = factory.createCookieHeaderValue({
+      sessionUuid: 'session',
+      accessToken: 'access',
+      refreshToken: 'refresh',
+      refreshTokenExpiration: expiration,
+    })
+
+    expect(cookies).toHaveLength(2)
+    expect(cookies.every((cookie) => !cookie.includes('Secure'))).toBe(true)
+  })
 })

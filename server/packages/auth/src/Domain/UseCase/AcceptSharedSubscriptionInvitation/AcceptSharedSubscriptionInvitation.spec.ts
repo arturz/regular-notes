@@ -216,7 +216,7 @@ describe('AcceptSharedSubscriptionInvitation', () => {
       }),
     ).toEqual({
       success: false,
-      message: 'The person that invited you does not have a running subscription with Standard Notes anymore.',
+      message: 'The person that invited you does not have a running subscription with Regular Notes anymore.',
     })
 
     expect(sharedSubscriptionInvitationRepository.save).not.toHaveBeenCalled()
@@ -241,7 +241,7 @@ describe('AcceptSharedSubscriptionInvitation', () => {
       }),
     ).toEqual({
       success: false,
-      message: 'The person that invited you does not have a running subscription with Standard Notes anymore.',
+      message: 'The person that invited you does not have a running subscription with Regular Notes anymore.',
     })
 
     expect(sharedSubscriptionInvitationRepository.save).not.toHaveBeenCalled()

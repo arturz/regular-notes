@@ -135,7 +135,7 @@ describe('SignInWithRecoveryCodes', () => {
 
     expect(result.isFailed()).toBe(true)
     expect(result.getError()).toEqual(
-      'This version of the application does not support your newer account type. Please upgrade to the latest version of Standard Notes to sign in.',
+      'This version of the application does not support your newer account type. Please upgrade to the latest version of Regular Notes to sign in.',
     )
   })
 

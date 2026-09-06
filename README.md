@@ -1,5 +1,7 @@
 # Regular Notes
 
+[![CI](https://github.com/arturz/regular-notes/actions/workflows/test.yml/badge.svg)](https://github.com/arturz/regular-notes/actions/workflows/test.yml)
+
 Run the end-to-end encrypted [Standard Notes](https://standardnotes.com) app on your own server.
 This setup uses roughly 10x less RAM than the official microservices setup
 (160 MB vs 1.6 GB). Everything runs in one container backed by plain SQLite.
